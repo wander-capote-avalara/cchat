@@ -1,0 +1,30 @@
+{
+	"name": "cchat",
+	"version": "1.0.0",
+	"description": "",
+	"main": "server.js",
+	"scripts": {
+		"test": "jasmine",
+		"start": "node server.js"
+	},
+	"engines": {
+		"node": "8.11.1"
+	},
+	"keywords": [
+		"heroku"
+	],
+	"author": "",
+	"license": "",
+	"dependencies": {
+		"body-parser": "^1.18.3",
+		"express": "^4.16.3",
+		"express-ip": "^1.0.3",
+		"mongoose": "^5.2.5",
+		"ngrok": "^3.1.0",
+		"socket.io": "^2.1.1"
+	},
+	"devDependencies": {
+		"jasmine": "^3.1.0",
+		"request": "^2.87.0"
+	}
+}
