@@ -49,6 +49,8 @@ app.post('/messages', async (req, res) => {
 
 		message.ll = ipInfo.ll;
 
+		console.log('message: '+message.ll);
+
 		var savedMessage = await message.save()
 		console.log('saved');
 
