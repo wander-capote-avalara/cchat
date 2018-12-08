@@ -103,7 +103,7 @@
 
 						if (lat && lng) {
 
-							const newMarker = new H.map.Marker({ lat, lng });
+							const newMarker = new H.map.Marker({ lat: lat.toFixed(6), lng: lng.toFixed(6) });
 							map.addObject(newMarker);
 						}
 					});
