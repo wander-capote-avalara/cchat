@@ -26,6 +26,21 @@ app.get('/messages', (req, res) => {
 	})
 })
 
+app.get('/messages/search/:content', (req, res) => {
+	var { content } = req.params;
+
+	Message.find({
+		$or: [{
+			message: new RegExp('^' + content + '$', "i")
+		}, {
+			name: new RegExp('^' + content + '$', "i")
+		}]
+	}, (err, messages) => {
+
+		res.send(messages);
+	})
+})
+
 app.get('/messages/:user', (req, res) => {
 	var user = req.params.user
 	Message.find({ name: user }, (err, messages) => {
