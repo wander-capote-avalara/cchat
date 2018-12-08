@@ -13,7 +13,8 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 var Message = mongoose.model('Message', {
 	name: String,
-	message: String
+	message: String,
+	ll: String
 })
 
 var dbUrl = 'mongodb://capote:capote123@ds129454.mlab.com:29454/catolica-chat'
@@ -36,26 +37,22 @@ app.get('/messages/:user', (req, res) => {
 
 app.get('*', function (req, res) {
 
-	const ipInfo = req.ipInfo;
-	var message = `${ipInfo.city}, ${ipInfo.country}`;
-
-	console.log(message);
-	console.log(ipInfo);
 	res.sendFile('index.html', { root: __dirname + '/' })
 })
 
 app.post('/messages', async (req, res) => {
 	try {
-		var message = new Message(req.body);
+
+		const ipInfo = req.ipInfo;
+
+		const message = new Message(req.body);
+
+		message.ll = ipInfo.ll;
 
 		var savedMessage = await message.save()
 		console.log('saved');
 
-		var censored = await Message.findOne({ message: 'oopsie' });
-		if (censored)
-			await Message.remove({ _id: censored.id })
-		else
-			io.emit('message', req.body);
+		io.emit('message', req.body);
 		res.sendStatus(200);
 	}
 	catch (error) {
