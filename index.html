@@ -95,7 +95,7 @@
 		socket.on('message', addMessages)
 
 		function addMessages(message) {
-			$("#messages").append(`<h4> ${message.name} </h4> <p> ${message.message} </p>`)
+			$("#messages").append(`<h4 style="border-top:1px solid rgba(0,0,0,0.1)"> ${message.name}: </h4> <p> ${message.message} </p>`)
 		}
 
 		function getMessages() {
@@ -119,7 +119,7 @@
 		}
 
 		function addSearchMessages(message) {
-			$("#searchMessages").append(`<h4> ${message.name} </h4> <p> ${message.message} </p>`)
+			$("#searchMessages").append(`<h4 style="border-top:1px solid rgba(0,0,0,0.1)"> ${message.name}: </h4> <p> ${message.message} </p>`)
 		}
 
 		//map
