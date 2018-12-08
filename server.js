@@ -3,7 +3,6 @@ const bodyParser = require('body-parser')
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
-const expressip = require('express-ip');
 const PORT = process.env.PORT || 3000;
 const mongoose = require('mongoose');
 
@@ -19,7 +18,6 @@ var Message = mongoose.model('Message', {
 
 var dbUrl = 'mongodb://capote:capote123@ds129454.mlab.com:29454/catolica-chat'
 
-app.use(expressip().getIpInfoMiddleware);
 app.set("PORT", PORT);
 
 app.get('/messages', (req, res) => {
@@ -43,13 +41,7 @@ app.get('*', function (req, res) {
 app.post('/messages', async (req, res) => {
 	try {
 
-		const ipInfo = req.ipInfo;
-
 		const message = new Message(req.body);
-
-		message.ll = ipInfo.ll;
-
-		console.log('message: '+message.ll);
 
 		var savedMessage = await message.save()
 		console.log('saved');
