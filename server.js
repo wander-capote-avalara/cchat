@@ -31,9 +31,13 @@ app.get('/messages/search/:content', (req, res) => {
 
 	Message.find({
 		$or: [{
-			message: new RegExp('^' + content + '$', "i")
+			message: {
+				$regex: '.*' + content + '.*'
+			}
 		}, {
-			name: new RegExp('^' + content + '$', "i")
+			name: {
+				$regex: '.*' + content + '.*'
+			}
 		}]
 	}, (err, messages) => {
 
