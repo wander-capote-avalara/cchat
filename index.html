@@ -3,6 +3,9 @@
 
 <head>
 	<title>CChat</title>
+	<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+	<script src="http://js.api.here.com/v3/3.0/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
+	<script src="http://js.api.here.com/v3/3.0/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
 	 crossorigin="anonymous">
 	<script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
@@ -25,18 +28,26 @@
 			<br>
 			<button id="send" class="btn btn-success">Enviar</button>
 		</div>
-		<div id="messages">
+		<div class="row">
 
+			<div class="col-lg-4">
+				<div id="messages">
+				</div>
+			</div>
+
+			<div class="col-lg-8">
+				<div style="width: 100%; height: 500px" id="mapContainer"></div>
+			</div>
 		</div>
 	</div>
 	<script>
 		var socket = io();
 		$(() => {
 			$("#send").click(() => {
-				sendMessage({ name: $("#name").val(), message: $("#message").val() });
-			})
+				sendMessage({ name: $("#name").val(), message: $("#message").val() })
+			});
 
-			getMessages()
+			getMessages();
 		})
 
 		socket.on('message', addMessages)
@@ -53,6 +64,53 @@
 
 		function sendMessage(message) {
 			$.post('/messages', message)
+		}
+
+		//map
+
+		function loadMap() {
+
+			var platform = new H.service.Platform({
+				'app_id': 'QJY01ChLKC2GiUPgPfmF',
+				'app_code': '6v00KFj1_u4P9lV25VcIxA'
+			});
+
+			var maptypes = platform.createDefaultLayers();
+
+			var map = new H.Map(
+				document.getElementById('mapContainer'),
+				maptypes.normal.map,
+				{
+					zoom: 12,
+					center: { lat: -26.300692, lng: -48.846198 }
+				});
+
+			addMarkersToMap(map);
+		}
+
+		loadMap();
+
+		function addMarkersToMap(map) {
+
+			try {
+
+				$.get('/messages', (messages) => {
+
+					messages.forEach(message => {
+
+						const [lat, lng] = message && message.ll ? message.ll.split(',') : [];
+
+						if (lat && lng) {
+
+							const newMarker = new H.map.Marker({ lat, lng });
+							map.addObject(newMarker);
+						}
+					});
+				});
+			} catch (error) {
+
+				console.log('lat or lng not found');
+			}
 		}
 	</script>
 </body>
